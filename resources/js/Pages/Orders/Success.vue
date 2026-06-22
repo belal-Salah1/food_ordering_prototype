@@ -73,16 +73,16 @@ const isCod = computed(() => props.order.payment_method === 'cod');
 
                 <div class="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
                     <Link 
-                        :href="route('menu')"
+                        :href="route('orders.tracking', order.id)"
                         class="rounded-full bg-[#da532c] px-8 py-3 font-semibold text-white transition hover:bg-[#bf4926]"
                     >
-                        Back to Menu
+                        Track Your Order
                     </Link>
                     <Link 
-                        href="/dashboard"
+                        :href="route('menu')"
                         class="rounded-full border border-[#e7ded3] bg-white px-8 py-3 font-semibold text-[#5b4f45] transition hover:bg-[#fbfaf8]"
                     >
-                        View My Orders
+                        Back to Menu
                     </Link>
                 </div>
             </div>

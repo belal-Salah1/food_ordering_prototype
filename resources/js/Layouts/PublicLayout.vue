@@ -84,10 +84,10 @@ const isHomeMenu = computed(() => currentUrl.value.startsWith(menuRoute.url()));
 
                         <template v-if="$page.props.auth.user">
                             <Link
-                                :href="dashboard.url()"
+                                :href="$page.props.auth.isAdmin ? route('admin.dashboard') : dashboard.url()"
                                 class="rounded-full px-4 py-2 transition hover:text-[#da532c]"
                             >
-                                {{ ui.navigation.dashboard }}
+                                {{ $page.props.auth.isAdmin ? (isArabic ? 'لوحة التحكم' : 'Admin Dashboard') : ui.navigation.dashboard }}
                             </Link>
 
                             <Link
