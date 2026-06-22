@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { Head, usePage, router } from '@inertiajs/vue3';
 import PublicLayout from '@/Layouts/PublicLayout.vue';
+import { __ } from '@/lib/i18n';
 
 const props = defineProps({
     order: Object,
@@ -27,12 +28,12 @@ const updateStatus = (status) => {
 
 const getStatusLabel = (status) => {
     const labels = {
-        pending: isArabic.value ? 'قيد الانتظار' : 'Pending',
-        confirmed: isArabic.value ? 'تم التأكيد' : 'Confirmed',
-        preparing: isArabic.value ? 'جاري التحضير' : 'Preparing',
-        out_for_delivery: isArabic.value ? 'خرج للتوصيل' : 'Out for Delivery',
-        delivered: isArabic.value ? 'تم التوصيل' : 'Delivered',
-        cancelled: isArabic.value ? 'ملغي' : 'Cancelled',
+        pending: __('pending'),
+        confirmed: __('confirmed'),
+        preparing: __('preparing'),
+        out_for_delivery: __('out_delivery'),
+        delivered: __('delivered'),
+        cancelled: __('cancelled'),
     };
     return labels[status] || status;
 };
@@ -47,18 +48,18 @@ const formatCurrency = (amount) => {
 
 <template>
     <PublicLayout>
-        <Head :title="isArabic ? 'تفاصيل الطلب' : 'Order Details'" />
+        <Head :title="__('order_details')" />
 
         <div class="mx-auto max-w-4xl py-10">
             <h1 class="text-3xl font-bold text-[#231f1b] mb-8">
-                {{ isArabic ? 'طلب' : 'Order' }} #{{ order.id }}
+                {{ __('order') }} #{{ order.id }}
             </h1>
 
             <div class="grid gap-8 lg:grid-cols-3">
                 <div class="lg:col-span-2 space-y-8">
                     <!-- Status Management -->
                     <div class="rounded-[2.5rem] border border-[#e7ded3] bg-white p-8">
-                        <h2 class="text-lg font-bold text-[#231f1b] mb-6">{{ isArabic ? 'تحديث الحالة' : 'Update Status' }}</h2>
+                        <h2 class="text-lg font-bold text-[#231f1b] mb-6">{{ __('update_status') }}</h2>
                         <div class="flex flex-wrap gap-3">
                             <button 
                                 v-for="status in statuses" 
@@ -76,7 +77,7 @@ const formatCurrency = (amount) => {
 
                     <!-- Items -->
                     <div class="rounded-[2.5rem] border border-[#e7ded3] bg-white p-8">
-                        <h2 class="text-lg font-bold text-[#231f1b] mb-6">{{ isArabic ? 'المنتجات' : 'Items' }}</h2>
+                        <h2 class="text-lg font-bold text-[#231f1b] mb-6">{{ __('items') }}</h2>
                         <div class="space-y-4">
                             <div v-for="item in order.items" :key="item.id" class="flex items-center gap-4">
                                 <div class="h-16 w-16 rounded-2xl bg-[#fbfaf8] overflow-hidden">
@@ -92,7 +93,7 @@ const formatCurrency = (amount) => {
                             </div>
                         </div>
                         <div class="mt-8 pt-6 border-t border-[#e7ded3] flex justify-between items-center font-bold text-xl">
-                            <span>{{ isArabic ? 'الإجمالي' : 'Total' }}</span>
+                            <span>{{ __('total') }}</span>
                             <span class="text-[#da532c]">{{ formatCurrency(order.total_amount) }}</span>
                         </div>
                     </div>
@@ -101,21 +102,21 @@ const formatCurrency = (amount) => {
                 <div class="space-y-8">
                     <!-- Customer -->
                     <div class="rounded-[2.5rem] border border-[#e7ded3] bg-[#fbfaf8] p-8">
-                        <h2 class="text-lg font-bold text-[#231f1b] mb-4">{{ isArabic ? 'العميل' : 'Customer' }}</h2>
+                        <h2 class="text-lg font-bold text-[#231f1b] mb-4">{{ __('customer') }}</h2>
                         <p class="font-bold text-[#da532c]">{{ order.user.name }}</p>
                         <p class="text-sm text-[#6b5f55]">{{ order.user.email }}</p>
                     </div>
 
                     <!-- Delivery -->
                     <div class="rounded-[2.5rem] border border-[#e7ded3] bg-[#fbfaf8] p-8">
-                        <h2 class="text-lg font-bold text-[#231f1b] mb-4">{{ isArabic ? 'التوصيل' : 'Delivery' }}</h2>
+                        <h2 class="text-lg font-bold text-[#231f1b] mb-4">{{ __('delivery') }}</h2>
                         <div class="space-y-4 text-sm">
                             <div>
-                                <p class="text-[10px] font-bold uppercase tracking-widest text-[#6b5f55]">{{ isArabic ? 'العنوان' : 'Address' }}</p>
+                                <p class="text-[10px] font-bold uppercase tracking-widest text-[#6b5f55]">{{ __('address') }}</p>
                                 <p class="mt-1 text-[#231f1b]">{{ order.address }}</p>
                             </div>
                             <div v-if="order.notes">
-                                <p class="text-[10px] font-bold uppercase tracking-widest text-[#6b5f55]">{{ isArabic ? 'ملاحظات' : 'Notes' }}</p>
+                                <p class="text-[10px] font-bold uppercase tracking-widest text-[#6b5f55]">{{ __('notes') }}</p>
                                 <p class="mt-1 text-[#231f1b] italic">"{{ order.notes }}"</p>
                             </div>
                         </div>

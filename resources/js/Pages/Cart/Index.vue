@@ -8,6 +8,7 @@ import TextInput from '@/Components/TextInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import Modal from '@/Components/Modal.vue';
 import { formatCurrency, useGuestCart } from '@/lib/guestCart';
+import { __ } from '@/lib/i18n';
 
 const page = usePage();
 const { cartItems, updateQuantity, removeItem, clearCart, totalItems, totalPrice } = useGuestCart();
@@ -58,7 +59,7 @@ const checkout = async () => {
         }
     } catch (error) {
         console.error(error);
-        errorMessage.value = error.response?.data?.message || (isArabic.value ? 'حدث خطأ ما. يرجى المحاولة مرة أخرى.' : 'An error occurred. Please try again.');
+        errorMessage.value = error.response?.data?.message || __('error_occurred');
         showErrorModal.value = true;
     } finally {
         isProcessing.value = false;
@@ -291,11 +292,11 @@ const checkout = async () => {
                 </div>
                 <h3 class="text-xl font-bold text-[#231f1b]">{{ ui.cart.address_error }}</h3>
                 <p class="mt-2 text-[#6b5f55]">
-                    {{ isArabic ? 'يرجى إدخال عنوان التوصيل لإكمال الطلب.' : 'Please provide a delivery address to complete your order.' }}
+                    {{ __('provide_address') }}
                 </p>
                 <div class="mt-8">
                     <PrimaryButton @click="showAddressModal = false" class="w-full justify-center py-4">
-                        {{ isArabic ? 'حسناً' : 'Understood' }}
+                        {{ __('understood') }}
                     </PrimaryButton>
                 </div>
             </div>
@@ -309,11 +310,11 @@ const checkout = async () => {
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold text-[#231f1b]">{{ isArabic ? 'خطأ' : 'Error' }}</h3>
+                <h3 class="text-xl font-bold text-[#231f1b]">{{ __('error') }}</h3>
                 <p class="mt-2 text-[#6b5f55]">{{ errorMessage }}</p>
                 <div class="mt-8">
                     <PrimaryButton @click="showErrorModal = false" class="w-full justify-center py-4 bg-red-600 hover:bg-red-700">
-                        {{ isArabic ? 'إغلاق' : 'Close' }}
+                        {{ __('close') }}
                     </PrimaryButton>
                 </div>
             </div>

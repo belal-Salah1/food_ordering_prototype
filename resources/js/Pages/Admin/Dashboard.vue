@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { Head, Link, usePage } from '@inertiajs/vue3';
 import PublicLayout from '@/Layouts/PublicLayout.vue';
+import { __ } from '@/lib/i18n';
 
 const page = usePage();
 const isArabic = computed(() => page.props.locale === 'ar');
@@ -9,11 +10,11 @@ const isArabic = computed(() => page.props.locale === 'ar');
 
 <template>
     <PublicLayout>
-        <Head :title="isArabic ? 'لوحة تحكم الأدمن' : 'Admin Dashboard'" />
+        <Head :title="__('admin_dashboard')" />
 
         <div class="py-10">
             <h1 class="text-3xl font-bold text-[#231f1b] mb-10">
-                {{ isArabic ? 'نظرة عامة على النظام' : 'Admin Overview' }}
+                {{ __('admin_overview') }}
             </h1>
 
             <div class="grid gap-8 md:grid-cols-2">
@@ -27,8 +28,8 @@ const isArabic = computed(() => page.props.locale === 'ar');
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                             </svg>
                         </div>
-                        <h2 class="text-2xl font-bold text-[#231f1b] mb-2">{{ isArabic ? 'إدارة الطلبات' : 'Order Management' }}</h2>
-                        <p class="text-[#6b5f55]">{{ isArabic ? 'تتبع وتحديث حالة طلبات العملاء' : 'Track and update customer order status' }}</p>
+                        <h2 class="text-2xl font-bold text-[#231f1b] mb-2">{{ __('order_management') }}</h2>
+                        <p class="text-[#6b5f55]">{{ __('track_status') }}</p>
                     </div>
                     <div class="absolute -right-4 -bottom-4 h-32 w-32 rounded-full bg-[#fff4f0] opacity-0 transition group-hover:opacity-50"></div>
                 </Link>
@@ -43,8 +44,8 @@ const isArabic = computed(() => page.props.locale === 'ar');
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                             </svg>
                         </div>
-                        <h2 class="text-2xl font-bold text-[#231f1b] mb-2">{{ isArabic ? 'إدارة المنتجات' : 'Product Management' }}</h2>
-                        <p class="text-[#6b5f55]">{{ isArabic ? 'إضافة وتعديل وحذف المنتجات من القائمة' : 'Add, edit, and delete items from the menu' }}</p>
+                        <h2 class="text-2xl font-bold text-[#231f1b] mb-2">{{ __('product_management') }}</h2>
+                        <p class="text-[#6b5f55]">{{ __('manage_menu') }}</p>
                     </div>
                     <div class="absolute -right-4 -bottom-4 h-32 w-32 rounded-full bg-[#fff4f0] opacity-0 transition group-hover:opacity-50"></div>
                 </Link>

@@ -6,6 +6,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import { __ } from '@/lib/i18n';
 
 const props = defineProps({
     product: Object,
@@ -41,27 +42,27 @@ const handleImage = (e) => {
 
 <template>
     <PublicLayout>
-        <Head :title="isEditing ? (isArabic ? 'تعديل منتج' : 'Edit Product') : (isArabic ? 'إضافة منتج' : 'Add Product')" />
+        <Head :title="isEditing ? __('edit_product') : __('add_product')" />
 
         <div class="mx-auto max-w-2xl py-10">
             <div class="mb-8 flex items-center justify-between">
                 <h1 class="text-3xl font-bold text-[#231f1b]">
-                    {{ isEditing ? (isArabic ? 'تعديل منتج' : 'Edit Product') : (isArabic ? 'إضافة منتج' : 'Add Product') }}
+                    {{ isEditing ? __('edit_product') : __('add_product') }}
                 </h1>
                 <Link :href="route('admin.products.index')" class="text-sm font-bold uppercase tracking-widest text-[#6b5f55] hover:text-[#da532c]">
-                    {{ isArabic ? 'إلغاء' : 'Cancel' }}
+                    {{ __('cancel') }}
                 </Link>
             </div>
 
             <form @submit.prevent="submit" class="rounded-[2.5rem] border border-[#e7ded3] bg-white p-8 space-y-6">
                 <div>
-                    <InputLabel :value="isArabic ? 'اسم المنتج' : 'Product Name'" />
+                    <InputLabel :value="__('product_name')" />
                     <TextInput v-model="form.name" type="text" class="mt-2 w-full" required />
                     <InputError :message="form.errors.name" class="mt-2" />
                 </div>
 
                 <div>
-                    <InputLabel :value="isArabic ? 'الوصف' : 'Description'" />
+                    <InputLabel :value="__('description')" />
                     <textarea 
                         v-model="form.description" 
                         class="mt-2 w-full rounded-2xl border-[#e7ded3] bg-[#fbfaf8] p-4 text-[#5b4f45] transition focus:border-[#da532c] focus:ring-[#da532c]"
@@ -72,19 +73,19 @@ const handleImage = (e) => {
 
                 <div class="grid gap-6 sm:grid-cols-2">
                     <div>
-                        <InputLabel :value="isArabic ? 'السعر ($)' : 'Price ($)'" />
+                        <InputLabel :value="__('price_usd')" />
                         <TextInput v-model="form.price" type="number" step="0.01" class="mt-2 w-full" required />
                         <InputError :message="form.errors.price" class="mt-2" />
                     </div>
                     <div>
-                        <InputLabel :value="isArabic ? 'الفئة' : 'Category'" />
+                        <InputLabel :value="__('category')" />
                         <TextInput v-model="form.category" type="text" class="mt-2 w-full" />
                         <InputError :message="form.errors.category" class="mt-2" />
                     </div>
                 </div>
 
                 <div>
-                    <InputLabel :value="isArabic ? 'صورة المنتج' : 'Product Image'" />
+                    <InputLabel :value="__('product_image')" />
                     <input 
                         type="file" 
                         @change="handleImage"
@@ -104,13 +105,13 @@ const handleImage = (e) => {
                         class="rounded border-[#e7ded3] text-[#da532c] focus:ring-[#da532c]"
                     >
                     <label for="is_available" class="text-sm font-bold text-[#231f1b]">
-                        {{ isArabic ? 'متوفر للطلب' : 'Available for order' }}
+                        {{ __('available_order') }}
                     </label>
                 </div>
 
                 <div class="pt-4">
                     <PrimaryButton class="w-full py-4 text-base" :disabled="form.processing">
-                        {{ isEditing ? (isArabic ? 'تحديث المنتج' : 'Update Product') : (isArabic ? 'حفظ المنتج' : 'Save Product') }}
+                        {{ isEditing ? __('update_product') : __('save_product') }}
                     </PrimaryButton>
                 </div>
             </form>

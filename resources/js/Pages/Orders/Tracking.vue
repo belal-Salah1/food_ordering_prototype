@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { Head, Link, usePage } from '@inertiajs/vue3';
 import PublicLayout from '@/Layouts/PublicLayout.vue';
+import { __ } from '@/lib/i18n';
 
 const props = defineProps({
     order: Object,
@@ -18,12 +19,12 @@ const currentStatusIndex = computed(() => {
 
 const getStatusLabel = (status) => {
     const labels = {
-        pending: isArabic.value ? 'قيد الانتظار' : 'Pending',
-        confirmed: isArabic.value ? 'تم التأكيد' : 'Confirmed',
-        preparing: isArabic.value ? 'جاري التحضير' : 'Preparing',
-        out_for_delivery: isArabic.value ? 'خرج للتوصيل' : 'Out for Delivery',
-        delivered: isArabic.value ? 'تم التوصيل' : 'Delivered',
-        cancelled: isArabic.value ? 'ملغي' : 'Cancelled',
+        pending: __('pending'),
+        confirmed: __('confirmed'),
+        preparing: __('preparing'),
+        out_for_delivery: __('out_delivery'),
+        delivered: __('delivered'),
+        cancelled: __('cancelled'),
     };
     return labels[status] || status;
 };
@@ -38,21 +39,21 @@ const formatCurrency = (amount) => {
 
 <template>
     <PublicLayout>
-        <Head :title="isArabic ? 'تتبع الطلب' : 'Track Order'" />
+        <Head :title="__('track_order')" />
 
         <div class="mx-auto max-w-3xl py-10">
             <div class="mb-8 flex items-center justify-between">
                 <div>
                     <h1 class="text-3xl font-bold text-[#231f1b]">
-                        {{ isArabic ? 'تتبع الطلب' : 'Track Order' }} #{{ order.id }}
+                        {{ __('track_order') }} #{{ order.id }}
                     </h1>
                     <p class="mt-2 text-[#6b5f55]">
-                        {{ isArabic ? 'حالة الطلب الحالية:' : 'Current Status:' }} 
+                        {{ __('current_status') }} 
                         <span class="font-bold text-[#da532c]">{{ getStatusLabel(order.status) }}</span>
                     </p>
                 </div>
                 <Link :href="route('menu')" class="text-sm font-bold uppercase tracking-widest text-[#da532c] hover:underline">
-                    {{ isArabic ? 'العودة للقائمة' : 'Back to Menu' }}
+                    {{ __('back_menu') }}
                 </Link>
             </div>
 
@@ -94,13 +95,13 @@ const formatCurrency = (amount) => {
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </div>
-                <h2 class="text-xl font-bold text-red-700">{{ isArabic ? 'تم إلغاء هذا الطلب' : 'This order has been cancelled' }}</h2>
+                <h2 class="text-xl font-bold text-red-700">{{ __('order_cancelled') }}</h2>
             </div>
 
             <!-- Order Details -->
             <div class="grid gap-8 md:grid-cols-2">
                 <div class="rounded-[2.5rem] border border-[#e7ded3] bg-white p-8">
-                    <h3 class="text-lg font-bold text-[#231f1b] mb-6">{{ isArabic ? 'محتويات الطلب' : 'Order Items' }}</h3>
+                    <h3 class="text-lg font-bold text-[#231f1b] mb-6">{{ __('order_items') }}</h3>
                     <div class="space-y-4">
                         <div v-for="item in order.items" :key="item.id" class="flex items-center gap-4">
                             <div class="h-12 w-12 rounded-xl bg-[#fbfaf8] overflow-hidden flex-shrink-0">
@@ -114,25 +115,25 @@ const formatCurrency = (amount) => {
                     </div>
                     <div class="mt-8 pt-6 border-t border-[#e7ded3]">
                         <div class="flex justify-between items-center">
-                            <span class="font-bold text-[#231f1b]">{{ isArabic ? 'الإجمالي' : 'Total' }}</span>
+                            <span class="font-bold text-[#231f1b]">{{ __('total') }}</span>
                             <span class="text-xl font-bold text-[#da532c]">{{ formatCurrency(order.total_amount) }}</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="rounded-[2.5rem] border border-[#e7ded3] bg-[#fbfaf8] p-8">
-                    <h3 class="text-lg font-bold text-[#231f1b] mb-6">{{ isArabic ? 'معلومات التوصيل' : 'Delivery Info' }}</h3>
+                    <h3 class="text-lg font-bold text-[#231f1b] mb-6">{{ __('delivery_info') }}</h3>
                     <div class="space-y-4 text-sm">
                         <div>
-                            <p class="font-bold text-[#6b5f55] uppercase tracking-widest text-[10px]">{{ isArabic ? 'العنوان' : 'Address' }}</p>
+                            <p class="font-bold text-[#6b5f55] uppercase tracking-widest text-[10px]">{{ __('address') }}</p>
                             <p class="mt-1 text-[#231f1b] leading-relaxed">{{ order.address }}</p>
                         </div>
                         <div v-if="order.notes">
-                            <p class="font-bold text-[#6b5f55] uppercase tracking-widest text-[10px]">{{ isArabic ? 'ملاحظات' : 'Notes' }}</p>
+                            <p class="font-bold text-[#6b5f55] uppercase tracking-widest text-[10px]">{{ __('notes') }}</p>
                             <p class="mt-1 text-[#231f1b] leading-relaxed italic">"{{ order.notes }}"</p>
                         </div>
                         <div>
-                            <p class="font-bold text-[#6b5f55] uppercase tracking-widest text-[10px]">{{ isArabic ? 'طريقة الدفع' : 'Payment Method' }}</p>
+                            <p class="font-bold text-[#6b5f55] uppercase tracking-widest text-[10px]">{{ __('payment_method') }}</p>
                             <p class="mt-1 text-[#231f1b] uppercase font-bold">{{ order.payment_method }}</p>
                         </div>
                     </div>

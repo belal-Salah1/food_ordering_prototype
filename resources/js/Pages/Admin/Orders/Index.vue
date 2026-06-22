@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { Head, Link, usePage, router } from '@inertiajs/vue3';
 import PublicLayout from '@/Layouts/PublicLayout.vue';
+import { __ } from '@/lib/i18n';
 
 const props = defineProps({
     orders: Object,
@@ -12,12 +13,12 @@ const isArabic = computed(() => page.props.locale === 'ar');
 
 const getStatusLabel = (status) => {
     const labels = {
-        pending: isArabic.value ? 'قيد الانتظار' : 'Pending',
-        confirmed: isArabic.value ? 'تم التأكيد' : 'Confirmed',
-        preparing: isArabic.value ? 'جاري التحضير' : 'Preparing',
-        out_for_delivery: isArabic.value ? 'خرج للتوصيل' : 'Out for Delivery',
-        delivered: isArabic.value ? 'تم التوصيل' : 'Delivered',
-        cancelled: isArabic.value ? 'ملغي' : 'Cancelled',
+        pending: __('pending'),
+        confirmed: __('confirmed'),
+        preparing: __('preparing'),
+        out_for_delivery: __('out_delivery'),
+        delivered: __('delivered'),
+        cancelled: __('cancelled'),
     };
     return labels[status] || status;
 };
@@ -32,11 +33,11 @@ const formatCurrency = (amount) => {
 
 <template>
     <PublicLayout>
-        <Head :title="isArabic ? 'إدارة الطلبات' : 'Order Management'" />
+        <Head :title="__('order_management')" />
 
         <div class="py-10">
             <h1 class="text-3xl font-bold text-[#231f1b] mb-8">
-                {{ isArabic ? 'إدارة الطلبات' : 'Orders' }}
+                {{ __('orders') }}
             </h1>
 
             <div class="overflow-hidden rounded-[2.5rem] border border-[#e7ded3] bg-white shadow-sm">
@@ -44,11 +45,11 @@ const formatCurrency = (amount) => {
                     <thead class="bg-[#fbfaf8] border-b border-[#e7ded3] text-[10px] font-bold uppercase tracking-[0.2em] text-[#6b5f55]">
                         <tr>
                             <th class="px-8 py-4">ID</th>
-                            <th class="px-8 py-4">{{ isArabic ? 'العميل' : 'Customer' }}</th>
-                            <th class="px-8 py-4">{{ isArabic ? 'الإجمالي' : 'Total' }}</th>
-                            <th class="px-8 py-4">{{ isArabic ? 'الحالة' : 'Status' }}</th>
-                            <th class="px-8 py-4">{{ isArabic ? 'التاريخ' : 'Date' }}</th>
-                            <th class="px-8 py-4 text-center">{{ isArabic ? 'الإجراءات' : 'Actions' }}</th>
+                            <th class="px-8 py-4">{{ __('customer') }}</th>
+                            <th class="px-8 py-4">{{ __('total') }}</th>
+                            <th class="px-8 py-4">{{ __('status') }}</th>
+                            <th class="px-8 py-4">{{ __('date') }}</th>
+                            <th class="px-8 py-4 text-center">{{ __('actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-[#e7ded3]">
@@ -81,7 +82,7 @@ const formatCurrency = (amount) => {
                                         :href="route('admin.orders.show', order.id)"
                                         class="text-xs font-bold uppercase tracking-widest text-[#da532c] hover:underline"
                                     >
-                                        {{ isArabic ? 'عرض' : 'View' }}
+                                        {{ __('view') }}
                                     </Link>
                                 </div>
                             </td>

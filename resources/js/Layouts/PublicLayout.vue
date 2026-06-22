@@ -4,6 +4,7 @@ import { Link, usePage } from '@inertiajs/vue3';
 import LocaleSwitcher from '@/Components/LocaleSwitcher.vue';
 import { useGuestCart } from '@/lib/guestCart';
 import { dashboard, login, logout, menu as menuRoute, register } from '@/routes';
+import { __ } from '@/lib/i18n';
 
 const page = usePage();
 const { itemCount } = useGuestCart();
@@ -87,7 +88,7 @@ const isHomeMenu = computed(() => currentUrl.value.startsWith(menuRoute.url()));
                                 :href="$page.props.auth.isAdmin ? route('admin.dashboard') : dashboard.url()"
                                 class="rounded-full px-4 py-2 transition hover:text-[#da532c]"
                             >
-                                {{ $page.props.auth.isAdmin ? (isArabic ? 'لوحة التحكم' : 'Admin Dashboard') : ui.navigation.dashboard }}
+                                {{ $page.props.auth.isAdmin ? __('admin_dashboard') : ui.navigation.dashboard }}
                             </Link>
 
                             <Link

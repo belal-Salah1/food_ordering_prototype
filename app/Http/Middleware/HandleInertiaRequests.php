@@ -36,6 +36,7 @@ class HandleInertiaRequests extends Middleware
                 'isAdmin' => $request->user() ? $request->user()->hasRole('admin') : false,
             ],
             'locale' => app()->getLocale(),
+            'translations' => json_decode(file_get_contents(lang_path(app()->getLocale().'.json')), true),
             'locales' => [
                 [
                     'code' => 'en',
