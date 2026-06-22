@@ -101,14 +101,14 @@ const isHomeMenu = computed(() => currentUrl.value.startsWith(menuRoute.url()));
 
                         <template v-else>
                             <Link
-                                :href="login.url()"
+                                :href="currentUrl === '/cart' ? route('checkout') : login.url()"
                                 class="rounded-full px-4 py-2 transition hover:text-[#da532c]"
                             >
                                 {{ ui.navigation.login }}
                             </Link>
 
                             <Link
-                                :href="register.url()"
+                                :href="currentUrl === '/cart' ? route('checkout') : register.url()"
                                 class="rounded-full px-4 py-2 transition hover:text-[#da532c]"
                             >
                                 {{ ui.navigation.register }}

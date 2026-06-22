@@ -6,6 +6,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::redirect('/', '/menu');
 
@@ -14,6 +15,10 @@ Route::get('/menu', [MenuController::class, 'index'])
 
 Route::get('/cart', [CartController::class, 'index'])
     ->name('cart');
+
+Route::get('/checkout', function () {
+    return redirect()->route('cart');
+})->middleware('auth')->name('checkout');
 
 Route::get('/locale/{locale}', LocaleController::class)
     ->whereIn('locale', ['en', 'ar'])

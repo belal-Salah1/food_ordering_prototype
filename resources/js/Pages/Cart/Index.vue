@@ -26,7 +26,7 @@ const isProcessing = ref(false);
 
 const checkout = async () => {
     if (!authUser.value) {
-        router.get(route('login'));
+        router.get(route('checkout'));
         return;
     }
 
