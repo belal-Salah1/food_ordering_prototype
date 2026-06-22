@@ -1,10 +1,12 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { Head, Link, usePage, router } from '@inertiajs/vue3';
+import axios from 'axios';
 import PublicLayout from '@/Layouts/PublicLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import TextInput from '@/Components/TextInput.vue';
+import InputLabel from '@/Components/InputLabel.vue';
 import { formatCurrency, useGuestCart } from '@/lib/guestCart';
-import { login } from '@/routes';
 
 const page = usePage();
 const { cartItems, updateQuantity, removeItem, clearCart, totalItems, totalPrice } = useGuestCart();
@@ -14,18 +16,48 @@ const locale = computed(() => page.props.locale ?? 'en');
 const authUser = computed(() => page.props.auth.user);
 const isArabic = computed(() => locale.value === 'ar');
 
-const checkout = () => {
+const form = ref({
+    payment_method: 'cod',
+    address: '',
+    notes: '',
+});
+
+const isProcessing = ref(false);
+
+const checkout = async () => {
     if (!authUser.value) {
         router.get(route('login'));
         return;
     }
 
-    router.post(route('orders.store'), {
-        items: cartItems.value,
-        total: totalPrice.value,
-    }, {
-        onSuccess: () => clearCart(),
-    });
+    if (!form.value.address) {
+        alert(isArabic.value ? 'يرجى إدخال العنوان' : 'Please enter your address');
+        return;
+    }
+
+    isProcessing.value = true;
+
+    try {
+        const response = await axios.post(route('orders.store'), {
+            items: cartItems.value,
+            total: totalPrice.value,
+            payment_method: form.value.payment_method,
+            address: form.value.address,
+            notes: form.value.notes,
+        });
+
+        if (response.data.url) {
+            window.location.href = response.data.url;
+        } else {
+            clearCart();
+            window.location.href = route('orders.success', { order: response.data.id });
+        }
+    } catch (error) {
+        console.error(error);
+        alert('An error occurred. Please try again.');
+    } finally {
+        isProcessing.value = false;
+    }
 };
 </script>
 
@@ -113,6 +145,69 @@ const checkout = () => {
                             <p class="text-[10px] text-[#6b5f55]">{{ formatCurrency(item.price, locale) }} / {{ ui.cart.unit }}</p>
                         </div>
                     </div>
+
+                    <div v-if="authUser" class="mt-8 space-y-6 rounded-[2.5rem] border border-[#e7ded3] bg-white p-8">
+                        <h2 class="text-xl font-bold text-[#231f1b]">{{ isArabic ? 'تفاصيل التوصيل' : 'Delivery Details' }}</h2>
+                        
+                        <div class="grid gap-6">
+                            <div class="space-y-2">
+                                <InputLabel :value="isArabic ? 'العنوان' : 'Delivery Address'" />
+                                <TextInput 
+                                    v-model="form.address"
+                                    type="text"
+                                    class="w-full"
+                                    :placeholder="isArabic ? 'أدخل عنوان التوصيل بالتفصيل' : 'Enter your full delivery address'"
+                                />
+                            </div>
+
+                            <div class="space-y-2">
+                                <InputLabel :value="isArabic ? 'ملاحظات إضافية' : 'Notes (Optional)'" />
+                                <textarea 
+                                    v-model="form.notes"
+                                    class="w-full rounded-2xl border-[#e7ded3] bg-[#fbfaf8] p-4 text-[#5b4f45] transition focus:border-[#da532c] focus:ring-[#da532c]"
+                                    rows="2"
+                                    :placeholder="isArabic ? 'أي ملاحظات للمطعم أو السائق؟' : 'Any notes for the restaurant or driver?'"
+                                ></textarea>
+                            </div>
+
+                            <div class="space-y-4">
+                                <InputLabel :value="isArabic ? 'طريقة الدفع' : 'Payment Method'" />
+                                <div class="grid gap-4 sm:grid-cols-2">
+                                    <label 
+                                        class="relative flex cursor-pointer items-center gap-4 rounded-2xl border p-4 transition"
+                                        :class="form.payment_method === 'cod' ? 'border-[#da532c] bg-[#fff4f0]' : 'border-[#e7ded3] hover:bg-[#fbfaf8]'"
+                                    >
+                                        <input type="radio" v-model="form.payment_method" value="cod" class="hidden" />
+                                        <div class="flex h-10 w-10 items-center justify-center rounded-full" :class="form.payment_method === 'cod' ? 'bg-[#da532c] text-white' : 'bg-[#e7ded3] text-[#6b5f55]'">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75m0 0v1.5m0-1.5h1.5m-1.5 0h1.5m-1.5 0V4.5m1.5 0v.75m0 0v1.5m0-1.5h1.5m-1.5 0h1.5m-1.5 0V4.5m1.5 0h1.5m0 1.5V4.5m0 0h1.5m-1.5 0V4.5m0 0H6.75m1.5 0h1.5m1.5 0h1.5m1.5 0h1.5m0 0v1.5m0 1.5v1.5m0 1.5v1.5m0 1.5c0 .332-.27.603-.603.603H15.75m-4.5 0H9m-1.5 0H6.75m-3 0h1.5" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="font-bold text-[#231f1b]">Cash on Delivery</p>
+                                            <p class="text-xs text-[#6b5f55]">Pay when you receive</p>
+                                        </div>
+                                    </label>
+
+                                    <label 
+                                        class="relative flex cursor-pointer items-center gap-4 rounded-2xl border p-4 transition"
+                                        :class="form.payment_method === 'online' ? 'border-[#da532c] bg-[#fff4f0]' : 'border-[#e7ded3] hover:bg-[#fbfaf8]'"
+                                    >
+                                        <input type="radio" v-model="form.payment_method" value="online" class="hidden" />
+                                        <div class="flex h-10 w-10 items-center justify-center rounded-full" :class="form.payment_method === 'online' ? 'bg-[#da532c] text-white' : 'bg-[#e7ded3] text-[#6b5f55]'">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75-6.75a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 .75.75v9a.75.75 0 0 1-.75.75H3.75a.75.75 0 0 1-.75-.75v-9c0-.215.11-.422.3-.532a.75.75 0 0 1 .45-.218Z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="font-bold text-[#231f1b]">Online Payment</p>
+                                            <p class="text-xs text-[#6b5f55]">Credit Card / Stripe</p>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="lg:col-span-1">
@@ -144,8 +239,12 @@ const checkout = () => {
                         <PrimaryButton
                             @click="checkout"
                             class="mt-6 w-full py-4 text-base"
+                            :disabled="isProcessing"
                         >
-                            <template v-if="authUser">
+                            <template v-if="isProcessing">
+                                ...
+                            </template>
+                            <template v-else-if="authUser">
                                 {{ ui.cart.confirm }}
                             </template>
                             <template v-else>

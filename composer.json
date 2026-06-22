@@ -16,7 +16,7 @@
         "laravel/socialite": "^5.28",
         "laravel/tinker": "^3.0",
         "laravel/wayfinder": "^0.1.14",
-        "stripe/stripe-php": "*",
+        "stripe/stripe-php": "^20.2",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
