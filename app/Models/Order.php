@@ -10,6 +10,10 @@ class Order extends Model
         'user_id',
         'total_amount',
         'status',
+        'payment_method',
+        'payment_status',
+        'stripe_session_id',
+        'address',
         'notes',
     ];
 

@@ -31,7 +31,7 @@ const checkout = async () => {
     }
 
     if (!form.value.address) {
-        alert(isArabic.value ? 'يرجى إدخال العنوان' : 'Please enter your address');
+        alert(ui.value.cart.address_error);
         return;
     }
 
@@ -147,31 +147,31 @@ const checkout = async () => {
                     </div>
 
                     <div v-if="authUser" class="mt-8 space-y-6 rounded-[2.5rem] border border-[#e7ded3] bg-white p-8">
-                        <h2 class="text-xl font-bold text-[#231f1b]">{{ isArabic ? 'تفاصيل التوصيل' : 'Delivery Details' }}</h2>
+                        <h2 class="text-xl font-bold text-[#231f1b]">{{ ui.cart.delivery_details }}</h2>
                         
                         <div class="grid gap-6">
                             <div class="space-y-2">
-                                <InputLabel :value="isArabic ? 'العنوان' : 'Delivery Address'" />
+                                <InputLabel :value="ui.cart.address" />
                                 <TextInput 
                                     v-model="form.address"
                                     type="text"
                                     class="w-full"
-                                    :placeholder="isArabic ? 'أدخل عنوان التوصيل بالتفصيل' : 'Enter your full delivery address'"
+                                    :placeholder="ui.cart.address_placeholder"
                                 />
                             </div>
 
                             <div class="space-y-2">
-                                <InputLabel :value="isArabic ? 'ملاحظات إضافية' : 'Notes (Optional)'" />
+                                <InputLabel :value="ui.cart.notes" />
                                 <textarea 
                                     v-model="form.notes"
                                     class="w-full rounded-2xl border-[#e7ded3] bg-[#fbfaf8] p-4 text-[#5b4f45] transition focus:border-[#da532c] focus:ring-[#da532c]"
                                     rows="2"
-                                    :placeholder="isArabic ? 'أي ملاحظات للمطعم أو السائق؟' : 'Any notes for the restaurant or driver?'"
+                                    :placeholder="ui.cart.notes_placeholder"
                                 ></textarea>
                             </div>
 
                             <div class="space-y-4">
-                                <InputLabel :value="isArabic ? 'طريقة الدفع' : 'Payment Method'" />
+                                <InputLabel :value="ui.cart.payment_method" />
                                 <div class="grid gap-4 sm:grid-cols-2">
                                     <label 
                                         class="relative flex cursor-pointer items-center gap-4 rounded-2xl border p-4 transition"
@@ -184,8 +184,8 @@ const checkout = async () => {
                                             </svg>
                                         </div>
                                         <div>
-                                            <p class="font-bold text-[#231f1b]">Cash on Delivery</p>
-                                            <p class="text-xs text-[#6b5f55]">Pay when you receive</p>
+                                            <p class="font-bold text-[#231f1b]">{{ ui.cart.cod }}</p>
+                                            <p class="text-xs text-[#6b5f55]">{{ ui.cart.cod_desc }}</p>
                                         </div>
                                     </label>
 
@@ -200,8 +200,8 @@ const checkout = async () => {
                                             </svg>
                                         </div>
                                         <div>
-                                            <p class="font-bold text-[#231f1b]">Online Payment</p>
-                                            <p class="text-xs text-[#6b5f55]">Credit Card / Stripe</p>
+                                            <p class="font-bold text-[#231f1b]">{{ ui.cart.online }}</p>
+                                            <p class="text-xs text-[#6b5f55]">{{ ui.cart.online_desc }}</p>
                                         </div>
                                     </label>
                                 </div>
@@ -234,6 +234,21 @@ const checkout = async () => {
                             <p class="text-sm font-medium text-[#da532c]">
                                 {{ ui.cart.signin_note }}
                             </p>
+                            <div class="mt-4 flex items-center justify-center gap-4 text-xs text-[#6b5f55]">
+                                <div class="flex items-center gap-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+                                    {{ ui.cart.cod }}
+                                </div>
+                                <div class="h-1 w-1 rounded-full bg-[#e7ded3]"></div>
+                                <div class="flex items-center gap-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                                    </svg>
+                                    {{ ui.cart.online }}
+                                </div>
+                            </div>
                         </div>
 
                         <PrimaryButton
