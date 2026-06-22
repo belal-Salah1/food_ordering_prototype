@@ -6,6 +6,7 @@ import PublicLayout from '@/Layouts/PublicLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
+import Modal from '@/Components/Modal.vue';
 import { formatCurrency, useGuestCart } from '@/lib/guestCart';
 
 const page = usePage();
@@ -23,6 +24,9 @@ const form = ref({
 });
 
 const isProcessing = ref(false);
+const showErrorModal = ref(false);
+const errorMessage = ref('');
+const showAddressModal = ref(false);
 
 const checkout = async () => {
     if (!authUser.value) {
@@ -31,7 +35,7 @@ const checkout = async () => {
     }
 
     if (!form.value.address) {
-        alert(ui.value.cart.address_error);
+        showAddressModal.value = true;
         return;
     }
 
@@ -50,11 +54,12 @@ const checkout = async () => {
             window.location.href = response.data.url;
         } else {
             clearCart();
-            window.location.href = route('orders.success', { order: response.data.id });
+            router.visit(route('orders.tracking', response.data.id));
         }
     } catch (error) {
         console.error(error);
-        alert('An error occurred. Please try again.');
+        errorMessage.value = error.response?.data?.message || (isArabic.value ? 'حدث خطأ ما. يرجى المحاولة مرة أخرى.' : 'An error occurred. Please try again.');
+        showErrorModal.value = true;
     } finally {
         isProcessing.value = false;
     }
@@ -274,5 +279,44 @@ const checkout = async () => {
                 </div>
             </div>
         </div>
+
+        <!-- Address Required Modal -->
+        <Modal :show="showAddressModal" @close="showAddressModal = false" maxWidth="md">
+            <div class="p-8 text-center">
+                <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#fff4f0] text-[#da532c]">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-8 w-8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-[#231f1b]">{{ ui.cart.address_error }}</h3>
+                <p class="mt-2 text-[#6b5f55]">
+                    {{ isArabic ? 'يرجى إدخال عنوان التوصيل لإكمال الطلب.' : 'Please provide a delivery address to complete your order.' }}
+                </p>
+                <div class="mt-8">
+                    <PrimaryButton @click="showAddressModal = false" class="w-full justify-center py-4">
+                        {{ isArabic ? 'حسناً' : 'Understood' }}
+                    </PrimaryButton>
+                </div>
+            </div>
+        </Modal>
+
+        <!-- Error Modal -->
+        <Modal :show="showErrorModal" @close="showErrorModal = false" maxWidth="md">
+            <div class="p-8 text-center">
+                <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-red-100 text-red-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-8 w-8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-[#231f1b]">{{ isArabic ? 'خطأ' : 'Error' }}</h3>
+                <p class="mt-2 text-[#6b5f55]">{{ errorMessage }}</p>
+                <div class="mt-8">
+                    <PrimaryButton @click="showErrorModal = false" class="w-full justify-center py-4 bg-red-600 hover:bg-red-700">
+                        {{ isArabic ? 'إغلاق' : 'Close' }}
+                    </PrimaryButton>
+                </div>
+            </div>
+        </Modal>
     </PublicLayout>
 </template>

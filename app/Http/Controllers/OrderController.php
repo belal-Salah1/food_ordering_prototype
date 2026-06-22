@@ -6,8 +6,8 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Stripe\Stripe;
 use Stripe\Checkout\Session;
+use Stripe\Stripe;
 
 class OrderController extends Controller
 {
@@ -68,7 +68,7 @@ class OrderController extends Controller
                     'payment_method_types' => ['card'],
                     'line_items' => $lineItems,
                     'mode' => 'payment',
-                    'success_url' => route('orders.success', ['order' => $order->id]) . '?session_id={CHECKOUT_SESSION_ID}',
+                    'success_url' => route('orders.success', ['order' => $order->id]).'?session_id={CHECKOUT_SESSION_ID}',
                     'cancel_url' => route('cart'),
                     'metadata' => [
                         'order_id' => $order->id,
@@ -80,7 +80,10 @@ class OrderController extends Controller
                 return response()->json(['url' => $session->url]);
             }
 
-            return redirect()->route('orders.success', ['order' => $order->id])->with('success', 'Order placed successfully!');
+            return response()->json([
+                'id' => $order->id,
+                'message' => 'Order placed successfully!',
+            ]);
         });
     }
 
