@@ -1,5 +1,7 @@
 # MealBox - Food Ordering System
 
+![MealBox Demo](demo.gif)
+
 MealBox is a modern, full-stack food ordering application built with the Laravel 13, Inertia.js v2, and Vue 3. It features a seamless guest-to-customer flow, real-time order tracking, and a comprehensive admin management system.
 
 ## 🚀 Overview
