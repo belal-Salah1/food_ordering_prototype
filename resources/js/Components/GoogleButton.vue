@@ -10,7 +10,7 @@ defineProps({
 <template>
     <a
         :href="href"
-        class="inline-flex w-full items-center justify-center gap-3 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+        class="inline-flex w-full items-center justify-center gap-3 rounded-full border border-[#e7ded3] bg-white px-6 py-3 text-sm font-semibold text-[#231f1b] shadow-sm transition-all duration-150 ease-in-out hover:bg-[#fbfaf8] focus:outline-none focus:ring-2 focus:ring-[#da532c] focus:ring-offset-2"
     >
         <svg
             aria-hidden="true"

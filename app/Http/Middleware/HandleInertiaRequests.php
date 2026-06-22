@@ -45,6 +45,10 @@ class HandleInertiaRequests extends Middleware
                     'label' => __('menu.locales.arabic'),
                 ],
             ],
+            'ui' => [
+                'menu' => trans('menu'),
+                'auth' => trans('auth'),
+            ],
         ];
     }
 }

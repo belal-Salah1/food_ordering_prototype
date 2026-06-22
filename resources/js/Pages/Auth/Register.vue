@@ -5,13 +5,17 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
-defineProps({
+const props = defineProps({
     oauthError: {
         type: String,
     },
 });
+
+const page = usePage();
+const ui = computed(() => page.props.ui.auth.register);
 
 const form = useForm({
     name: '',
@@ -29,91 +33,102 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Register" />
+        <Head :title="ui.title" />
+
+        <div class="mb-8 text-center">
+            <h1 class="text-2xl font-bold text-[#231f1b]">{{ ui.welcome }}</h1>
+            <p class="mt-2 text-[#6b5f55]">{{ ui.subtitle }}</p>
+        </div>
 
         <div
             v-if="oauthError"
-            class="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700"
+            class="mb-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700"
         >
             {{ oauthError }}
         </div>
 
-        <div class="mb-6 space-y-4">
+        <div class="mb-8 space-y-4">
             <GoogleButton
                 :href="route('auth.google.redirect', { source: 'register' })"
-            />
+            >
+                {{ ui.google }}
+            </GoogleButton>
 
-            <div class="flex items-center gap-3">
-                <div class="h-px flex-1 bg-gray-200"></div>
+            <div class="flex items-center gap-4">
+                <div class="h-px flex-1 bg-[#e7ded3]"></div>
                 <span
-                    class="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400"
+                    class="text-[10px] font-bold uppercase tracking-[0.3em] text-[#6b5f55]"
                 >
-                    or
+                    {{ ui.or }}
                 </span>
-                <div class="h-px flex-1 bg-gray-200"></div>
+                <div class="h-px flex-1 bg-[#e7ded3]"></div>
             </div>
         </div>
 
-        <form @submit.prevent="submit">
+        <form @submit.prevent="submit" class="space-y-6">
             <div>
-                <InputLabel for="name" value="Name" />
+                <InputLabel for="name" :value="ui.name" />
 
                 <TextInput
                     id="name"
                     type="text"
-                    class="mt-1 block w-full"
+                    class="mt-2"
                     v-model="form.name"
                     required
                     autofocus
                     autocomplete="name"
+                    placeholder="Your Name"
                 />
 
                 <InputError class="mt-2" :message="form.errors.name" />
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="email" value="Email" />
+            <div>
+                <InputLabel for="email" :value="ui.email" />
 
                 <TextInput
                     id="email"
                     type="email"
-                    class="mt-1 block w-full"
+                    class="mt-2"
                     v-model="form.email"
                     required
                     autocomplete="username"
+                    placeholder="name@example.com"
                 />
 
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+            <div>
+                <InputLabel for="password" :value="ui.password" />
 
                 <TextInput
                     id="password"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="mt-2"
                     v-model="form.password"
                     required
                     autocomplete="new-password"
+                    placeholder="••••••••"
                 />
 
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
-            <div class="mt-4">
+            <div>
                 <InputLabel
                     for="password_confirmation"
-                    value="Confirm Password"
+                    :value="ui.confirm_password"
                 />
 
                 <TextInput
                     id="password_confirmation"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="mt-2"
                     v-model="form.password_confirmation"
                     required
                     autocomplete="new-password"
+                    placeholder="••••••••"
                 />
 
                 <InputError
@@ -122,22 +137,23 @@ const submit = () => {
                 />
             </div>
 
-            <div class="mt-4 flex items-center justify-end">
+            <PrimaryButton
+                class="w-full"
+                :class="{ 'opacity-25': form.processing }"
+                :disabled="form.processing"
+            >
+                {{ ui.submit }}
+            </PrimaryButton>
+
+            <p class="text-center text-sm text-[#6b5f55]">
+                {{ ui.has_account }}
                 <Link
                     :href="route('login')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    class="font-bold text-[#da532c] hover:underline"
                 >
-                    Already registered?
+                    {{ ui.login }}
                 </Link>
-
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Register
-                </PrimaryButton>
-            </div>
+            </p>
         </form>
     </GuestLayout>
 </template>
