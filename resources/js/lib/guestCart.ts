@@ -167,6 +167,20 @@ export function useGuestCart() {
         persistCart();
     }
 
+    function updateQuantity(productId: number, quantity: number): void {
+        hydrateCart();
+
+        if (quantity < 1) {
+            removeItem(productId);
+            return;
+        }
+
+        cartItems.value = cartItems.value.map((item) =>
+            item.id === productId ? { ...item, quantity } : item,
+        );
+        persistCart();
+    }
+
     function hasItem(productId: number): boolean {
         return getQuantity(productId) > 0;
     }
@@ -181,9 +195,12 @@ export function useGuestCart() {
         cartItems,
         itemCount,
         subtotal,
+        totalItems: itemCount,
+        totalPrice: subtotal,
         addItem,
         removeItem,
         clearCart,
+        updateQuantity,
         hasItem,
         getQuantity,
     };

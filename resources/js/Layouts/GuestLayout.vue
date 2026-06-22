@@ -4,7 +4,7 @@ import { Link, usePage } from '@inertiajs/vue3';
 import LocaleSwitcher from '@/Components/LocaleSwitcher.vue';
 
 const page = usePage();
-const ui = computed(() => page.props.ui || {
+const ui = computed(() => page.props.ui?.menu || {
     brand: 'MealBox',
     brand_tagline: 'Real meals, local cart',
 });
@@ -14,7 +14,7 @@ const isArabic = computed(() => (page.props.locale ?? 'en') === 'ar');
 <template>
     <div
         :dir="isArabic ? 'rtl' : 'ltr'"
-        class="flex min-h-screen flex-col items-center bg-[#fbfaf8] pt-12 sm:justify-center sm:pt-0"
+        class="flex min-h-screen flex-col items-center bg-[#fbfaf8] py-12 sm:justify-center"
         style="font-family: Arial, Helvetica, sans-serif"
     >
         <div class="mb-8">

@@ -118,16 +118,19 @@ const isHomeMenu = computed(() => currentUrl.value.startsWith(menuRoute.url()));
 
                     <LocaleSwitcher />
 
-                    <div
-                        class="inline-flex items-center gap-3 rounded-full border border-[#e7ded3] bg-[#fbfaf8] px-4 py-2 text-sm font-semibold text-[#5b4f45]"
+                    <Link
+                        :href="route('cart')"
+                        class="inline-flex items-center gap-3 rounded-full border border-[#e7ded3] bg-[#fbfaf8] px-4 py-2 text-sm font-semibold text-[#5b4f45] transition hover:border-[#da532c]"
+                        :class="{ 'bg-[#da532c] text-white border-[#da532c]': $page.url === '/cart' }"
                     >
                         <span>{{ ui.cart.badge }}</span>
                         <span
-                            class="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-[#da532c] px-2 text-xs font-bold text-white"
+                            class="inline-flex h-6 min-w-6 items-center justify-center rounded-full px-2 text-xs font-bold transition"
+                            :class="$page.url === '/cart' ? 'bg-white text-[#da532c]' : 'bg-[#da532c] text-white'"
                         >
                             {{ itemCount }}
                         </span>
-                    </div>
+                    </Link>
                 </div>
             </div>
         </header>

@@ -46,7 +46,7 @@ class HandleInertiaRequests extends Middleware
                 ],
             ],
             'ui' => [
-                'menu' => trans('menu'),
+                ...trans('menu'),
                 'auth' => trans('auth'),
             ],
         ];
